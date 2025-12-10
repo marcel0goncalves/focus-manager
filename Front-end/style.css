@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+#cad-user{
+    width: 224px;
+}
+#login-user{
+    width: 224px;
+}
+body {
+    background: #f3f3f3;
+}
+
+header {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.title {
+    font-size: 2.3rem;
+    font-weight: bold;
+}
+
+.txt1 {
+    color: #444;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.box {
+    background: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 14px rgba(0,0,0,0.1);
+    width: 330px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input {
+    height: 40px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+}
+
+input:focus {
+    border-color: #4b79ff;
+}
+
+.btn1, .btn2 {
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn1 {
+    background: #4b79ff;
+    color: white;
+}
+
+.btn1:hover {
+    background: #315dff;
+}
+
+.btn2 {
+    background: #ddd;
+}
+
+.btn2:hover {
+    background: #c9c9c9;
+}
+
+/* Wrapper da senha com olho */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.eye {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
