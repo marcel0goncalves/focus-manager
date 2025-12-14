@@ -1,65 +1,119 @@
-// === SISTEMA DE TROCA ENTRE LOGIN E CADASTRO ===
+// ============================
+//     TROCA LOGIN / CADASTRO
+// ============================
 
-// Pega os elementos das áreas
+// Elementos do front
 const loginArea = document.getElementById("login-area");
 const registerArea = document.getElementById("register-area");
 
-// Botão que abre cadastro
 const btnOpenRegister = document.getElementById("btn-open-register");
-
-// Botão que volta ao login
 const btnBackLogin = document.getElementById("btn-back-login");
 
-// Quando clicar em "Cadastrar-se"
 btnOpenRegister.addEventListener("click", () => {
-
-    // Esconde o login
     loginArea.style.display = "none";
-
-    // Mostra o cadastro
     registerArea.style.display = "block";
 });
 
-// Quando clicar em "Voltar ao Login"
 btnBackLogin.addEventListener("click", () => {
-
-    // Mostra o login
-    loginArea.style.display = "block";
-
-    // Esconde o cadastro
     registerArea.style.display = "none";
+    loginArea.style.display = "block";
+});
+
+
+// ============================
+//    SISTEMA DE MOSTRAR SENHA
+// ============================
+
+const eyes = document.querySelectorAll(".eye");
+
+eyes.forEach(eye => {
+    const inputId = eye.getAttribute("data-target");
+    const input = document.getElementById(inputId);
+
+    const eyeOpen = eye.querySelector(".eye-open");
+    const eyeClosed = eye.querySelector(".eye-closed");
+
+    eye.addEventListener("click", () => {
+        const hidden = input.type === "password";
+        input.type = hidden ? "text" : "password";
+        eyeOpen.style.display = hidden ? "none" : "block";
+        eyeClosed.style.display = hidden ? "block" : "none";
+    });
 });
 
 
 
-// === SISTEMA PROFISSIONAL DO OLHO ===
+// ========================================================
+//   VALIDAÇÃO + ENVIO DE LOGIN PARA O BACK-END REAL
+// ========================================================
 
-// Seleciona TODOS os itens com a classe .eye
-const eyes = document.querySelectorAll(".eye");
+const loginBtn = document.querySelector("#login-area .btn1");
 
-// Para cada ícone de olho encontrado:
-eyes.forEach(eye => {
+loginBtn.addEventListener("click", async () => {
 
-    // 'target' = qual input esse olho controla (vem do data-target)
-    const inputId = eye.getAttribute("data-target");
-    const input = document.getElementById(inputId);
+    const username = document.getElementById("login-user").value.trim();
+    const senha = document.getElementById("login-pass").value.trim();
 
-    // SVGs internos
-    const eyeOpen = eye.querySelector(".eye-open");
-    const eyeClosed = eye.querySelector(".eye-closed");
+    // validação simples
+    if (username === "" || senha === "") {
+        alert("Preencha todos os campos!");
+        return;
+    }
 
-    // Clique no olho
-    eye.addEventListener("click", () => {
-
-        // Verifica se está oculto
-        const isHidden = input.type === "password";
-
-        // Alterna a visibilidade do input
-        input.type = isHidden ? "text" : "password";
-
-        // Alterna visibilidade dos ícones
-        eyeOpen.style.display = isHidden ? "none" : "block";
-        eyeClosed.style.display = isHidden ? "block" : "none";
+    // envia para o back-end
+    const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, senha })
     });
 
+    const data = await response.json();
+
+    if (data.status === "ok") {
+        alert("Login autorizado!");
+        window.location.href = "dashboard.html"; // página após login
+    } else {
+        alert(data.msg);
+    }
+});
+
+
+
+// ========================================================
+//   VALIDAÇÃO + ENVIO DE CADASTRO PARA O BACK-END REAL
+// ========================================================
+
+const registerBtn = document.querySelector("#register-area .btn1");
+
+registerBtn.addEventListener("click", async () => {
+
+    const username = document.getElementById("cad-user").value.trim();
+    const senha1 = document.getElementById("cad-pass").value.trim();
+    const senha2 = document.getElementById("cad-pass2").value.trim();
+
+    if (username === "" || senha1 === "" || senha2 === "") {
+        alert("Todos os campos são obrigatórios!");
+        return;
+    }
+
+    if (senha1 !== senha2) {
+        alert("As senhas não coincidem!");
+        return;
+    }
+
+    const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, senha: senha1 })
+    });
+
+    const data = await response.json();
+
+    if (data.status === "ok") {
+        alert("Cadastro realizado!");
+        registerArea.style.display = "none";
+        loginArea.style.display = "block";
+    } else {
+        alert(data.msg);
+    }
 });
